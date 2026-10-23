@@ -21,7 +21,7 @@ Ship **PhotoDesk**, Benjamin's own macOS desktop photo editor, as a product unde
 1. **Fork** `storytold/photocraft` to Benjamin's GitHub, clone to `~/src/photodesk`, work on branch `feat/photodesk-rebrand`.
 2. **Rebrand** every user-visible surface:
    - App name: **PhotoDesk** (window title, menu bar, About box, strings).
-   - App/bundle id: `ai.storyteller.photocraft` → `com.promotedge.photodesk`.
+   - App/bundle id: `com.promotedge.photodesk` → `com.promotedge.photodesk`.
    - New app icon and any splash/branding assets (ArtCraft marks removed).
    - Cargo package metadata (name, authors, homepage) where it feeds the UI/bundle.
    - Acknowledgements entry crediting photocraft/ArtCraft with license text retained.

@@ -39,7 +39,7 @@ Pick one file from the release. Use `x86_64` for Intel and AMD, or `aarch64` for
 | AppImage            | `photocraft-<version>-linux-x86_64.AppImage` | Runs anywhere and needs no install.                                                |
 | Debian and Ubuntu   | `photocraft-<version>-linux-x86_64.deb`      |                                                                                    |
 | Fedora and openSUSE | `photocraft-<version>-linux-x86_64.rpm`      |                                                                                    |
-| Flatpak             | `photocraft-<version>-linux-x86_64.flatpak`  | Run `flatpak install --user <file>`, then `flatpak run ai.storyteller.photocraft`. |
+| Flatpak             | `photocraft-<version>-linux-x86_64.flatpak`  | Run `flatpak install --user <file>`, then `flatpak run com.promotedge.photodesk`. |
 | Tarball             | `photocraft-<version>-linux-x86_64.tar.gz`   | Unpack it anywhere.                                                                |
 
 The first time you run the AppImage, it adds its icon and menu entry under `~/.local/share`. Set `PHOTOCRAFT_NO_DESKTOP_INTEGRATION=1` to skip that. For RISC-V, take the `riscv64` file: `photocraft-<version>-linux-riscv64.tar.gz`, `.deb` or `.rpm`. The RISC-V tarball needs glibc 2.39 or newer.

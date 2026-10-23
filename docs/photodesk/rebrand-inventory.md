@@ -6,7 +6,7 @@ Grep base: `grep -rniE 'photocraft|artcraft|storyteller|storytold|getartcraft'` 
 - 165 `.rs` files contain the literal `PhotoCraft` (window title in `crates/ui-egui/src/panels.rs`, `APP_NAME` in `crates/ui-egui/src/native_menu.rs:31`, About in `crates/ui-egui/src/dialogs.rs:649`, splash in `crates/ui-egui/src/canvas.rs:3199`, plus matching test asserts). Replace case-sensitively in **code and tests together** so the suite stays consistent.
 - `crates/ui-egui/src/i18n/*.tsv` — translations are keyed by the English source string; replace `PhotoCraft` there too so lookups keep matching. `LICENSE-translations.txt` stays untouched (license).
 
-## B. App/bundle id — `ai.storyteller.photocraft` → `com.promotedge.photodesk`
+## B. App/bundle id — `ai.storyteller.photocraft` (old) → `com.promotedge.photodesk`
 - `packaging/macos/Info.plist.in` (bundle id + document UTIs), `packaging/macos/package.sh` (CLI signing id).
 - `packaging/linux/*` (.desktop, AppRun, flatpak manifests, mime/metainfo) + file renames; `packaging/icons.sh`; `packaging/windows/package.ps1`; icon filenames under `assets/app-icon/hicolor/*/apps/`.
 
