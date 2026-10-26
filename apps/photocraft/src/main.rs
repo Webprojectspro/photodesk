@@ -1,4 +1,4 @@
-//! PhotoCraft desktop app.
+//! PhotoDesk desktop app.
 //!
 //! Usage: `photocraft [--control <port>] [--control-token <64-hex> |
 //! --control-token-file <path>] [--automation-read-root <dir>]
@@ -10,7 +10,7 @@
 //! such as `--safegpu` doesn't open the window and then fail to open the flag as a file. A file
 //! whose name starts with `-` goes after `--`.
 //!
-//! On Windows and Linux a launch hands its files to the PhotoCraft that is already running (new
+//! On Windows and Linux a launch hands its files to the PhotoDesk that is already running (new
 //! tabs in its window) and exits; `--new-instance` starts a separate copy instead, as does any
 //! `--control` launch (see `single_instance`).
 //!
@@ -80,7 +80,7 @@ use photocraft_engine::Session;
 use photocraft_ui_egui::PhotocraftApp;
 
 /// Matches the `.desktop` file and hicolor icon name, so Wayland docks pick up the icon.
-const APP_ID: &str = "ai.storyteller.photocraft";
+const APP_ID: &str = "com.promotedge.photodesk";
 
 /// Windows and Linux: no OS title bar; the app's top bar is the title bar, with its own caption
 /// buttons and edge resizing (`photocraft_ui_egui::titlebar`), as Photoshop does on Windows. macOS
@@ -106,7 +106,7 @@ fn native_options(custom_titlebar: bool) -> eframe::NativeOptions {
     eframe::NativeOptions {
         viewport: viewport
             .with_app_id(APP_ID)
-            .with_title("PhotoCraft")
+            .with_title("PhotoDesk")
             .with_inner_size([1440.0, 900.0])
             .with_min_inner_size([760.0, 480.0])
             .with_drag_and_drop(true)
@@ -124,7 +124,7 @@ fn native_options(custom_titlebar: bool) -> eframe::NativeOptions {
 }
 
 /// The window eframe restores from `ui.ron`, corrected before it is created: at least the
-/// minimum size, and never full screen. PhotoCraft always starts in Standard Screen Mode, but
+/// minimum size, and never full screen. PhotoDesk always starts in Standard Screen Mode, but
 /// eframe also saves and restores full screen, and a window closed in a full-screen mode is
 /// saved full screen and maximized at once: the overlap `view_cmds::screen_mode_commands` keeps
 /// apart at run time. [OBSERVED 2026-10-12, Windows 11] Restored that way, View › Screen Mode ›
@@ -135,7 +135,7 @@ fn restored_window(builder: egui::ViewportBuilder) -> egui::ViewportBuilder {
 
 /// Grow a restored window that is smaller than the minimum size, keeping its centre. On
 /// Windows, eframe saves a minimized window's size (160 pt wide, 64 pt tall once eframe has
-/// clamped it), and the minimum size isn't applied to a restored one: PhotoCraft then reopened
+/// clamped it), and the minimum size isn't applied to a restored one: PhotoDesk then reopened
 /// as a 160 × 64 strip on every launch.
 fn at_least_min_size(mut builder: egui::ViewportBuilder) -> egui::ViewportBuilder {
     let (Some(size), Some(min)) = (builder.inner_size, builder.min_inner_size) else { return builder };
@@ -165,14 +165,14 @@ fn usage_exit_code(errors: &[String]) -> Option<i32> {
 const USAGE: &str = "\
 Usage: photocraft [options] [--] [files…]
 
-Opens PhotoCraft with the given files.
+Opens PhotoDesk with the given files.
 
 Options:
   -h, --help                       Print this help and exit
       --version                    Print the version, commit and build date and exit
       --safe-gpu                   Start with the CPU renderer for this launch (after a graphics driver crash)
       --in-window-menus            macOS: keep the menus inside the window instead of the menu bar
-      --new-instance               Windows and Linux: start a separate PhotoCraft instead of opening
+      --new-instance               Windows and Linux: start a separate PhotoDesk instead of opening
                                    the files in the one already running
       --present-mode <mode>        How frames reach the display: fifo, autovsync or novsync
       --frame-latency <n>          Frames queued for the display: 1 to 3
@@ -507,7 +507,7 @@ fn main() -> eframe::Result {
     // and usage errors leave no file behind. Records logged until now are written to it first.
     if let (Some(logger), Some(dir)) = (logger, services::config_dir()) {
         match logger.attach_dir(&dir.join("logs")) {
-            Ok(path) => log::info!("PhotoCraft {}, log file {}", photocraft_engine::build_info::long_version(), path.display()),
+            Ok(path) => log::info!("PhotoDesk {}, log file {}", photocraft_engine::build_info::long_version(), path.display()),
             // Standard error only by now (`attach_dir` gave up on the file); unlike `eprintln!`, never panics.
             Err(e) => log::warn!("no log file: {e}"),
         }
@@ -518,7 +518,7 @@ fn main() -> eframe::Result {
     if gpu_startup::adapter_override_is_process_specific(std::env::var("PHOTOCRAFT_GPU_ADAPTER").ok().as_deref(), rendering_mode, gpu_startup::ADAPTER_CHOICE) {
         launch_options.push("PHOTOCRAFT_GPU_ADAPTER");
     }
-    // One PhotoCraft per user (#3708): files opened from Explorer or a file manager while it runs
+    // One PhotoDesk per user (#3708): files opened from Explorer or a file manager while it runs
     // become tabs in its window. Only with the per-user settings folder (a portable copy's may be
     // shared between users), and not for automation, `--new-instance` or per-process options.
     #[cfg(not(target_os = "macos"))]
@@ -541,7 +541,7 @@ fn main() -> eframe::Result {
         };
         match (single_instance::skip_reason(&context), services::config_dir()) {
             (Some(reason), _) => {
-                log::info!("running as a separate PhotoCraft: {reason}");
+                log::info!("running as a separate PhotoDesk: {reason}");
                 None
             }
             (None, None) => None,
@@ -549,12 +549,12 @@ fn main() -> eframe::Result {
                 let paths: Vec<String> = files.iter().map(|f| single_instance::absolute(f)).collect();
                 match single_instance::claim(&dir, &paths) {
                     single_instance::Launch::Forwarded => {
-                        log::info!("handed {} file(s) to the running PhotoCraft", paths.len());
+                        log::info!("handed {} file(s) to the running PhotoDesk", paths.len());
                         return Ok(());
                     }
                     single_instance::Launch::Primary(primary) => Some(primary),
                     single_instance::Launch::Standalone(reason) => {
-                        log::warn!("starting a separate PhotoCraft: {reason}");
+                        log::warn!("starting a separate PhotoDesk: {reason}");
                         None
                     }
                 }
@@ -718,7 +718,7 @@ fn main() -> eframe::Result {
     let created_in_callback = app_created.clone();
     let started_sentinel = sentinel.clone();
     let result = eframe::run_native(
-        "PhotoCraft",
+        "PhotoDesk",
         options,
         Box::new(move |cc| {
             created_in_callback.store(true, std::sync::atomic::Ordering::Relaxed);
@@ -1047,7 +1047,7 @@ mod tests {
             .with_fullscreen(true)
             .with_maximized(true);
         let opened = hook(saved);
-        assert_eq!(opened.fullscreen, Some(false), "Standard Screen Mode is where PhotoCraft starts");
+        assert_eq!(opened.fullscreen, Some(false), "Standard Screen Mode is where PhotoDesk starts");
         assert_eq!(opened.maximized, Some(true), "the rest of the saved geometry is kept");
         assert_eq!(opened.inner_size, Some(egui::vec2(2560.0, 1392.0)));
     }
@@ -1077,7 +1077,7 @@ mod tests {
     /// so it has to be the class the window carries: the app id, on Wayland and X11 alike.
     #[test]
     fn the_desktop_entry_names_the_window_class() {
-        let entry = include_str!("../../../packaging/linux/ai.storyteller.photocraft.desktop");
+        let entry = include_str!("../../../packaging/linux/com.promotedge.photodesk.desktop");
         let class = entry.lines().find_map(|line| line.strip_prefix("StartupWMClass="));
         assert_eq!(class, Some(super::APP_ID));
     }

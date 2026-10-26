@@ -1,4 +1,4 @@
-//! One PhotoCraft per user on Windows and Linux (#3708): a file opened from Explorer or a file
+//! One PhotoDesk per user on Windows and Linux (#3708): a file opened from Explorer or a file
 //! manager lands as a new tab in the running window, like Photoshop, instead of starting a second
 //! copy of the program.
 //!
@@ -14,7 +14,7 @@
 //! (the primary is still starting, hung, or quitting) keeps retrying the lock, so it becomes the
 //! primary itself as soon as the old one lets go, and when its time runs out it starts a separate
 //! instance: a file is never acknowledged and then dropped. [`Primary::shutdown`] runs when the
-//! event loop ends (and before the CPU-compatibility relaunch), so a closing PhotoCraft refuses new
+//! event loop ends (and before the CPU-compatibility relaunch), so a closing PhotoDesk refuses new
 //! files and frees the lock.
 //!
 //! Only for the per-user settings folder ([`skip_reason`]): a portable copy's folder beside the
@@ -364,7 +364,7 @@ pub fn claim_in(dir: &Path, paths: &[String], timing: Timing, transport: &Transp
             }
         }
         if Instant::now() >= deadline {
-            return Launch::Standalone(format!("the running PhotoCraft didn't take the files ({last})"));
+            return Launch::Standalone(format!("the running PhotoDesk didn't take the files ({last})"));
         }
         std::thread::sleep(Duration::from_millis(100));
     }
@@ -969,8 +969,8 @@ mod tests {
     #[test]
     fn the_socket_transport_needs_a_flatpak_id_and_a_runtime_directory() {
         use std::ffi::OsStr;
-        let (id, run) = (OsStr::new("ai.storyteller.photocraft"), OsStr::new("/run/user/1000"));
-        assert_eq!(sandbox_socket(Some(id), Some(run)), Some(PathBuf::from("/run/user/1000/app/ai.storyteller.photocraft/instance.sock")));
+        let (id, run) = (OsStr::new("com.promotedge.photodesk"), OsStr::new("/run/user/1000"));
+        assert_eq!(sandbox_socket(Some(id), Some(run)), Some(PathBuf::from("/run/user/1000/app/com.promotedge.photodesk/instance.sock")));
         assert_eq!(sandbox_socket(None, Some(run)), None);
         assert_eq!(sandbox_socket(Some(id), None), None);
         assert_eq!(sandbox_socket(Some(OsStr::new("")), Some(run)), None);
